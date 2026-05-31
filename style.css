@@ -97,48 +97,11 @@ a { text-decoration: none; color: inherit; }
 }
 .section-header p { color: var(--gray); max-width: 520px; margin: 0 auto; }
 
-/* ===== HEADER ===== */
-.header {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 1000;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
-  transition: box-shadow 0.3s;
-}
-.header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,0.1); }
-
-.header__inner {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  height: 72px;
-}
-
-.header__logo img { height: 56px; width: auto; }
-
-
-.header__phone {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--gradient);
-  color: var(--white);
-  padding: 10px 20px;
-  border-radius: 50px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  white-space: nowrap;
-  transition: all 0.2s;
-}
-.header__phone:hover { filter: brightness(1.1); transform: translateY(-1px); }
-
 
 /* ===== HERO ===== */
 .hero {
   position: relative;
-  padding: 160px 0 100px;
+  padding: 100px 0 100px;
   overflow: hidden;
   min-height: 90vh;
   display: flex;
@@ -502,7 +465,6 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 768px) {
-  .header__phone { font-size: 0.82rem; padding: 8px 14px; }
 
   .hero { padding: 120px 0 80px; min-height: 70vh; }
 

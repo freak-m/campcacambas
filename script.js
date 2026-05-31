@@ -1,10 +1,4 @@
-// Header shadow on scroll
-const header = document.getElementById('header');
-window.addEventListener('scroll', () => {
-  header.classList.toggle('scrolled', window.scrollY > 20);
-});
-
-// Smooth reveal on scroll
+//Smooth reveal on scroll
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
