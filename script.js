@@ -4,18 +4,6 @@ window.addEventListener('scroll', () => {
   header.classList.toggle('scrolled', window.scrollY > 20);
 });
 
-// Mobile menu
-const hamburger = document.getElementById('hamburger');
-const nav = document.getElementById('nav');
-hamburger.addEventListener('click', () => {
-  nav.classList.toggle('open');
-});
-
-// Close mobile menu on link click
-nav.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => nav.classList.remove('open'));
-});
-
 // Smooth reveal on scroll
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
