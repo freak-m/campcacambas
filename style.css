@@ -116,7 +116,7 @@ a { text-decoration: none; color: inherit; }
   height: 72px;
 }
 
-.header__logo img { height: 48px; width: auto; }
+.header__logo img { height: 56px; width: auto; }
 
 .header__nav {
   display: flex;
