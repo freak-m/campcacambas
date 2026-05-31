@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 200" width="300" height="200">
+  <!-- C verde superior -->
+  <path d="M60 20 A80 80 0 0 1 140 100 L110 100 A50 50 0 0 0 60 50 Z" fill="#7abf47"/>
+  <!-- C azul inferior -->
+  <path d="M60 180 A80 80 0 0 0 140 100 L110 100 A50 50 0 0 1 60 150 Z" fill="#3a86c8"/>
+  <!-- Texto camp -->
+  <text x="155" y="90" font-family="Arial Black, sans-serif" font-size="42" font-weight="900" fill="#1a1a1a">amp</text>
+  <!-- Texto CAÇAMBAS -->
+  <text x="60" y="175" font-family="Arial Black, sans-serif" font-size="32" font-weight="900" fill="#1a1a1a">CAÇAMBAS</text>
+</svg>
