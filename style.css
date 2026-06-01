@@ -481,13 +481,14 @@ a { text-decoration: none; color: inherit; }
 
 .footer__bottom {
   text-align: center;
-  padding: 24px;
-  color: rgba(0,0,0,0.35);
+  padding: 12px;
+  background: linear-gradient(135deg, var(--blue), var(--green));
+  color: rgba(255,255,255,0.9);
   font-size: 0.82rem;
 }
 .footer__bottom a {
-  color: var(--blue);
-  font-weight: 600;
+  color: #fff;
+  font-weight: 700;
   transition: opacity 0.2s;
 }
 .footer__bottom a:hover { opacity: 0.75; }
@@ -495,7 +496,7 @@ a { text-decoration: none; color: inherit; }
 /* ===== WHATSAPP FLOAT ===== */
 .whatsapp-float {
   position: fixed;
-  bottom: 28px;
+  bottom: 90px;
   right: 28px;
   z-index: 999;
   display: flex;
