@@ -426,7 +426,14 @@ a { text-decoration: none; color: inherit; }
   border-bottom: 1px solid rgba(255,255,255,0.07);
 }
 
-.footer__logo img { height: 56px; width: auto; margin-bottom: 16px; }
+.footer__logo img {
+  height: auto;
+  width: 180px;
+  margin-bottom: 16px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px 14px;
+}
 .footer__logo p { color: rgba(255,255,255,0.5); font-size: 0.9rem; line-height: 1.6; }
 
 .footer__links, .footer__contact { display: flex; flex-direction: column; gap: 10px; }
