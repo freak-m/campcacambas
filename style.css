@@ -147,9 +147,19 @@ a { text-decoration: none; color: inherit; }
 .hero__text h1 {
   font-size: clamp(2.2rem, 4.5vw, 3.8rem);
   font-weight: 900;
-  line-height: 1.1;
-  margin-bottom: 20px;
+  line-height: 1.2;
+  margin-bottom: 24px;
   color: #fff;
+}
+
+.hero__glass {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 16px;
+  padding: 20px 28px;
 }
 .hero__text h1 span {
   background: var(--gradient);
