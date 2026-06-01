@@ -439,9 +439,8 @@ a { text-decoration: none; color: inherit; }
 
 /* ===== FOOTER ===== */
 .footer {
-  background: var(--white);
-  padding-top: 64px;
-  border-top: 1px solid rgba(0,0,0,0.08);
+  background: var(--black);
+  padding-top: 0;
 }
 
 .footer__inner {
