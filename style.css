@@ -472,6 +472,12 @@ a { text-decoration: none; color: inherit; }
   color: rgba(0,0,0,0.35);
   font-size: 0.82rem;
 }
+.footer__bottom a {
+  color: var(--blue);
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+.footer__bottom a:hover { opacity: 0.75; }
 
 /* ===== WHATSAPP FLOAT ===== */
 .whatsapp-float {
