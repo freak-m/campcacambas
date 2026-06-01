@@ -184,7 +184,13 @@ a { text-decoration: none; color: inherit; }
   max-width: 480px;
 }
 
-.hero__buttons { display: flex; gap: 16px; flex-wrap: wrap; }
+.hero__buttons { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
+
+.hero__sub {
+  font-size: 0.95rem;
+  color: rgba(255,255,255,0.75);
+  max-width: 480px;
+}
 
 .btn--outline-white {
   background: transparent;
