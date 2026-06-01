@@ -164,10 +164,7 @@ a { text-decoration: none; color: inherit; }
   width: fit-content;
 }
 .hero__text h1 span {
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #fff;
 }
 .hero__text p {
   font-size: 1.05rem;
