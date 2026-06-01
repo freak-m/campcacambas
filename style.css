@@ -129,6 +129,17 @@ a { text-decoration: none; color: inherit; }
   max-width: 680px;
 }
 
+.hero__logo {
+  width: 160px;
+  height: auto;
+  margin-bottom: 20px;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 10px 14px;
+}
+
 .hero__tag {
   display: inline-block;
   background: rgba(255,255,255,0.18);
