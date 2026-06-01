@@ -130,14 +130,13 @@ a { text-decoration: none; color: inherit; }
 }
 
 .hero__logo {
-  width: 160px;
+  width: 200px;
   height: auto;
-  margin-bottom: 20px;
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 12px;
-  padding: 10px 14px;
+  margin-bottom: 24px;
+  background: rgba(255,255,255,0.92);
+  border-radius: 16px;
+  padding: 14px 20px;
+  box-shadow: 0 0 40px 12px rgba(255,255,255,0.55), 0 0 80px 24px rgba(255,255,255,0.25);
 }
 
 .hero__tag {
