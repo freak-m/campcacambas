@@ -548,7 +548,7 @@ a { text-decoration: none; color: inherit; }
   .footer__inner { grid-template-columns: 1fr; gap: 32px; }
 
   .whatsapp-float span { display: none; }
-  .whatsapp-float { padding: 16px; border-radius: 50%; }
+  .whatsapp-float { padding: 16px; border-radius: 50%; bottom: 72px; }
 }
 
 @media (max-width: 480px) {
