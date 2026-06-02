@@ -296,6 +296,8 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   flex-direction: column;
   gap: 12px;
+  align-items: center;
+  text-align: center;
 }
 .service-card:hover {
   transform: translateY(-6px);
