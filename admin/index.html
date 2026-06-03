@@ -161,7 +161,7 @@
   .accordion-body.open { display: block; }
 
   /* ───────── FEATURE CARDS GRID ───────── */
-  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .feature-grid { display: flex; flex-direction: column; gap: 12px; }
   .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
   .feature-card-label { font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; }
 
@@ -242,7 +242,6 @@
     <nav>
       <button class="nav-tab active" data-tab="seo">🔍 SEO</button>
       <button class="nav-tab" data-tab="secoes">📄 Seções</button>
-      <button class="nav-tab" data-tab="rodape">🔗 Rodapé</button>
     </nav>
     <div class="sidebar-bottom">
       <button class="btn-preview" id="toggle-preview">👁 Preview</button>
@@ -299,23 +298,27 @@
           </button>
           <div class="accordion-body" id="acc-features">
             <div class="feature-grid">
-              <div class="feature-card">
-                <div class="feature-card-label">Card 1</div>
+              <div class="feature-card subsection">
+                <div class="subsection-label">Card 1</div>
+                <div class="field"><label>Ícone</label><select id="feat0-icon" class="icon-select"><option value="shield">🛡 Segurança</option><option value="clock">⏱ Rapidez</option><option value="dollar">💲 Preço</option><option value="users">👥 Atendimento</option><option value="truck">🚛 Entrega</option><option value="star">⭐ Qualidade</option><option value="check">✅ Garantia</option><option value="leaf">🌱 Ambiental</option></select></div>
                 <div class="field"><label>Título</label><input type="text" id="feat0-title"></div>
                 <div class="field"><label>Descrição</label><textarea id="feat0-desc" class="short"></textarea></div>
               </div>
-              <div class="feature-card">
-                <div class="feature-card-label">Card 2</div>
+              <div class="feature-card subsection">
+                <div class="subsection-label">Card 2</div>
+                <div class="field"><label>Ícone</label><select id="feat1-icon" class="icon-select"><option value="shield">🛡 Segurança</option><option value="clock" selected>⏱ Rapidez</option><option value="dollar">💲 Preço</option><option value="users">👥 Atendimento</option><option value="truck">🚛 Entrega</option><option value="star">⭐ Qualidade</option><option value="check">✅ Garantia</option><option value="leaf">🌱 Ambiental</option></select></div>
                 <div class="field"><label>Título</label><input type="text" id="feat1-title"></div>
                 <div class="field"><label>Descrição</label><textarea id="feat1-desc" class="short"></textarea></div>
               </div>
-              <div class="feature-card">
-                <div class="feature-card-label">Card 3</div>
+              <div class="feature-card subsection">
+                <div class="subsection-label">Card 3</div>
+                <div class="field"><label>Ícone</label><select id="feat2-icon" class="icon-select"><option value="shield">🛡 Segurança</option><option value="clock">⏱ Rapidez</option><option value="dollar" selected>💲 Preço</option><option value="users">👥 Atendimento</option><option value="truck">🚛 Entrega</option><option value="star">⭐ Qualidade</option><option value="check">✅ Garantia</option><option value="leaf">🌱 Ambiental</option></select></div>
                 <div class="field"><label>Título</label><input type="text" id="feat2-title"></div>
                 <div class="field"><label>Descrição</label><textarea id="feat2-desc" class="short"></textarea></div>
               </div>
-              <div class="feature-card">
-                <div class="feature-card-label">Card 4</div>
+              <div class="feature-card subsection">
+                <div class="subsection-label">Card 4</div>
+                <div class="field"><label>Ícone</label><select id="feat3-icon" class="icon-select"><option value="shield">🛡 Segurança</option><option value="clock">⏱ Rapidez</option><option value="dollar">💲 Preço</option><option value="users" selected>👥 Atendimento</option><option value="truck">🚛 Entrega</option><option value="star">⭐ Qualidade</option><option value="check">✅ Garantia</option><option value="leaf">🌱 Ambiental</option></select></div>
                 <div class="field"><label>Título</label><input type="text" id="feat3-title"></div>
                 <div class="field"><label>Descrição</label><textarea id="feat3-desc" class="short"></textarea></div>
               </div>
@@ -336,24 +339,28 @@
             <hr class="divider">
             <div class="subsection">
               <div class="subsection-label">Serviço 1</div>
+              <div class="field"><label>Ícone</label><select id="srv0-icon" class="icon-select"><option value="home" selected>🏠 Residencial</option><option value="building">🏢 Comercial</option><option value="trash">🗑 Demolição</option><option value="map-pin">📍 Terreno</option><option value="truck">🚛 Transporte</option><option value="recycle">♻ Reciclagem</option><option value="tool">🔧 Reforma</option><option value="star">⭐ Outro</option></select></div>
               <div class="field"><label>Título</label><input type="text" id="srv0-title"></div>
               <div class="field"><label>Descrição</label><textarea id="srv0-desc" class="short"></textarea></div>
               <div class="field"><label>Texto WhatsApp</label><input type="text" id="srv0-wa"></div>
             </div>
             <div class="subsection">
               <div class="subsection-label">Serviço 2</div>
+              <div class="field"><label>Ícone</label><select id="srv1-icon" class="icon-select"><option value="home">🏠 Residencial</option><option value="building" selected>🏢 Comercial</option><option value="trash">🗑 Demolição</option><option value="map-pin">📍 Terreno</option><option value="truck">🚛 Transporte</option><option value="recycle">♻ Reciclagem</option><option value="tool">🔧 Reforma</option><option value="star">⭐ Outro</option></select></div>
               <div class="field"><label>Título</label><input type="text" id="srv1-title"></div>
               <div class="field"><label>Descrição</label><textarea id="srv1-desc" class="short"></textarea></div>
               <div class="field"><label>Texto WhatsApp</label><input type="text" id="srv1-wa"></div>
             </div>
             <div class="subsection">
               <div class="subsection-label">Serviço 3</div>
+              <div class="field"><label>Ícone</label><select id="srv2-icon" class="icon-select"><option value="home">🏠 Residencial</option><option value="building">🏢 Comercial</option><option value="trash" selected>🗑 Demolição</option><option value="map-pin">📍 Terreno</option><option value="truck">🚛 Transporte</option><option value="recycle">♻ Reciclagem</option><option value="tool">🔧 Reforma</option><option value="star">⭐ Outro</option></select></div>
               <div class="field"><label>Título</label><input type="text" id="srv2-title"></div>
               <div class="field"><label>Descrição</label><textarea id="srv2-desc" class="short"></textarea></div>
               <div class="field"><label>Texto WhatsApp</label><input type="text" id="srv2-wa"></div>
             </div>
             <div class="subsection">
               <div class="subsection-label">Serviço 4</div>
+              <div class="field"><label>Ícone</label><select id="srv3-icon" class="icon-select"><option value="home">🏠 Residencial</option><option value="building">🏢 Comercial</option><option value="trash">🗑 Demolição</option><option value="map-pin" selected>📍 Terreno</option><option value="truck">🚛 Transporte</option><option value="recycle">♻ Reciclagem</option><option value="tool">🔧 Reforma</option><option value="star">⭐ Outro</option></select></div>
               <div class="field"><label>Título</label><input type="text" id="srv3-title"></div>
               <div class="field"><label>Descrição</label><textarea id="srv3-desc" class="short"></textarea></div>
               <div class="field"><label>Texto WhatsApp</label><input type="text" id="srv3-wa"></div>
@@ -400,6 +407,7 @@
             <div class="field"><label for="about-tag">Tag da seção</label><input type="text" id="about-tag"></div>
             <div class="field"><label for="about-title">Título</label><input type="text" id="about-title"></div>
             <div class="field"><label for="about-desc">Descrição</label><textarea id="about-desc" class="short"></textarea></div>
+            <div class="field"><label for="about-photo">Foto (nome do arquivo em assets/)</label><input type="text" id="about-photo" placeholder="about us.png"></div>
             <hr class="divider">
             <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
               <div class="subsection">
@@ -438,23 +446,6 @@
     </div><!-- /tab-secoes -->
 
     <!-- RODAPÉ TAB -->
-    <div class="tab-panel" id="tab-rodape">
-      <div class="editor-header">Rodapé</div>
-      <div style="padding: 20px 24px 40px;">
-        <div class="field">
-          <label for="footer-copy">Copyright</label>
-          <input type="text" id="footer-copy" placeholder="© 2024 Camp Caçambas. Todos os direitos reservados.">
-        </div>
-        <div class="field">
-          <label for="footer-credit-url">URL do crédito</label>
-          <input type="url" id="footer-credit-url" placeholder="https://exemplo.com">
-        </div>
-        <div class="field">
-          <label for="footer-credit-name">Nome do crédito</label>
-          <input type="text" id="footer-credit-name" placeholder="Nome do desenvolvedor">
-        </div>
-      </div>
-    </div>
 
   </div><!-- /editor -->
 
@@ -724,12 +715,12 @@
   //  ACCORDIONS
   // ════════════════════════════════════════════
   const sectionMap = {
-    hero:     '#hero',
-    features: '#diferenciais, .diferenciais, [data-section="diferenciais"]',
-    services: '#servicos, #services, .servicos',
-    how:      '#como-funciona, #how, .como-funciona',
-    about:    '#sobre, #about, .sobre',
-    cta:      '#cta, .cta'
+    hero:     'inicio',
+    features: 'diferenciais',
+    services: 'servicos',
+    how:      'como-funciona',
+    about:    'sobre',
+    cta:      'contato'
   };
 
   document.querySelectorAll('.accordion-header').forEach(header => {
@@ -746,9 +737,9 @@
         header.classList.add('open');
         body.classList.add('open');
         // notify iframe to scroll & highlight
-        if (previewVisible) {
+        if (previewVisible && sectionMap[key]) {
           try {
-            previewFrame.contentWindow.postMessage({ type: 'cms_scroll', section: key }, '*');
+            previewFrame.contentWindow.postMessage({ type: 'cms_scroll', id: sectionMap[key] }, '*');
           } catch (_) {}
         }
       }

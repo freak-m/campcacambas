@@ -338,9 +338,18 @@
         if (el) {
           el.scrollIntoView({ behavior: 'smooth', block: 'start' });
           setTimeout(function() {
-            el.style.transition = 'outline 0s';
-            el.style.outline = '3px solid #F5C400';
-            setTimeout(function() { el.style.outline = 'none'; }, 1200);
+            var flashes = 0;
+            function flash() {
+              el.style.outline = '3px solid #e74c3c';
+              el.style.boxShadow = '0 0 0 4px rgba(231,76,60,0.3)';
+              setTimeout(function() {
+                el.style.outline = 'none';
+                el.style.boxShadow = 'none';
+                flashes++;
+                if (flashes < 2) setTimeout(flash, 350);
+              }, 500);
+            }
+            flash();
           }, 700);
         }
       }
