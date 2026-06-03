@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camp CMS</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --accent: #3a86c8;
+    --accent2: #2ecc71;
+    --sidebar: #111;
+    --editor: #1a1a1a;
+    --card: #222;
+    --input: #2a2a2a;
+    --border: #333;
+    --text: #e0e0e0;
+    --label: #888;
+    --sidebar-w: 220px;
+  }
+
+  html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--editor); color: var(--text); }
+
+  /* ───────── LOGIN ───────── */
+  #login-screen {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    background: #0d0d0d;
+  }
+  #login-screen.hidden { display: none; }
+  .login-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 40px 36px; width: 360px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .login-logo { font-size: 22px; font-weight: 700; color: #fff; text-align: center; }
+  .login-logo span { color: var(--accent); }
+  .login-label { font-size: 13px; color: var(--label); margin-bottom: 6px; display: block; }
+  .login-box input[type="password"] {
+    width: 100%; padding: 10px 12px;
+    background: var(--input); border: 1px solid var(--border);
+    border-radius: 6px; color: #fff; font-size: 14px; outline: none;
+    transition: border-color .2s;
+  }
+  .login-box input[type="password"]:focus { border-color: var(--accent); }
+  #login-btn {
+    background: var(--accent); border: none; border-radius: 6px;
+    color: #fff; font-size: 14px; font-weight: 600; padding: 11px;
+    cursor: pointer; transition: opacity .2s;
+  }
+  #login-btn:hover { opacity: .85; }
+  #login-error { color: #e74c3c; font-size: 13px; text-align: center; min-height: 18px; }
+
+  /* ───────── APP SHELL ───────── */
+  #app { display: flex; height: 100vh; overflow: hidden; }
+  #app.hidden { display: none; }
+
+  /* ───────── SIDEBAR ───────── */
+  #sidebar {
+    width: var(--sidebar-w); background: var(--sidebar);
+    display: flex; flex-direction: column; flex-shrink: 0;
+    border-right: 1px solid #1f1f1f;
+  }
+  .sidebar-logo {
+    padding: 24px 20px 20px;
+    font-size: 17px; font-weight: 700; color: #fff;
+    border-bottom: 1px solid #1f1f1f; letter-spacing: .3px;
+  }
+  .sidebar-logo span { color: var(--accent); }
+  nav { flex: 1; padding: 12px 0; }
+  .nav-tab {
+    display: block; width: 100%; padding: 11px 20px;
+    background: none; border: none; text-align: left;
+    color: var(--label); font-size: 14px; cursor: pointer;
+    transition: color .15s, background .15s;
+    border-left: 3px solid transparent;
+  }
+  .nav-tab:hover { color: var(--text); background: #191919; }
+  .nav-tab.active { color: #fff; background: #1c1c1c; border-left-color: var(--accent); font-weight: 600; }
+  .sidebar-bottom {
+    padding: 16px 14px; display: flex; flex-direction: column; gap: 8px;
+    border-top: 1px solid #1f1f1f;
+  }
+  .btn-preview {
+    background: #222; border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); font-size: 13px; padding: 9px 12px; cursor: pointer;
+    transition: background .15s; text-align: left;
+  }
+  .btn-preview:hover { background: #2a2a2a; }
+  .btn-publish {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; border-radius: 6px; color: #fff;
+    font-size: 13px; font-weight: 600; padding: 10px 12px;
+    cursor: pointer; transition: opacity .2s; text-align: left;
+  }
+  .btn-publish:hover { opacity: .88; }
+  .btn-logout {
+    background: #333; border: none; border-radius: 6px;
+    color: var(--label); font-size: 13px; padding: 9px 12px;
+    cursor: pointer; transition: background .15s; text-align: left;
+  }
+  .btn-logout:hover { background: #3a3a3a; color: var(--text); }
+
+  /* ───────── EDITOR PANEL ───────── */
+  #editor {
+    width: 560px; flex-shrink: 0;
+    background: var(--editor); overflow-y: auto;
+    border-right: 1px solid var(--border);
+  }
+  .editor-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 15px; font-weight: 600; color: #fff;
+  }
+  .tab-panel { display: none; padding: 20px 24px 40px; }
+  .tab-panel.active { display: block; }
+
+  /* ───────── FIELDS ───────── */
+  .field { margin-bottom: 16px; }
+  .field label { display: block; font-size: 12px; color: var(--label); margin-bottom: 5px; letter-spacing: .4px; text-transform: uppercase; }
+  .field input[type="text"],
+  .field input[type="url"],
+  .field input[type="tel"],
+  .field textarea {
+    width: 100%; background: var(--input); border: 1px solid var(--border);
+    border-radius: 6px; color: #fff; font-size: 14px;
+    padding: 9px 11px; outline: none; transition: border-color .2s;
+    font-family: inherit; resize: vertical;
+  }
+  .field input:focus, .field textarea:focus { border-color: var(--accent); }
+  .field textarea.tall { min-height: 80px; }
+  .field textarea.short { min-height: 56px; }
+  .section-title {
+    font-size: 13px; font-weight: 600; color: var(--accent);
+    margin: 22px 0 12px; text-transform: uppercase; letter-spacing: .5px;
+  }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+  /* ───────── ACCORDIONS ───────── */
+  .accordion { border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; overflow: hidden; }
+  .accordion-header {
+    width: 100%; background: var(--card); border: none;
+    color: var(--text); font-size: 14px; font-weight: 500;
+    padding: 13px 16px; text-align: left; cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: background .15s; border-left: 3px solid transparent;
+  }
+  .accordion-header:hover { background: #2a2a2a; }
+  .accordion-header.open { border-left-color: var(--accent); color: #fff; }
+  .accordion-arrow { transition: transform .2s; font-size: 11px; color: var(--label); }
+  .accordion-header.open .accordion-arrow { transform: rotate(180deg); }
+  .accordion-body { display: none; padding: 16px; background: #1e1e1e; border-top: 1px solid var(--border); }
+  .accordion-body.open { display: block; }
+
+  /* ───────── FEATURE CARDS GRID ───────── */
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+  .feature-card-label { font-size: 11px; color: var(--accent); font-weight: 600; margin-bottom: 8px; text-transform: uppercase; }
+
+  /* ───────── SUB-SECTIONS ───────── */
+  .subsection { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-bottom: 10px; }
+  .subsection-label { font-size: 11px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 10px; }
+
+  /* ───────── PREVIEW PANE ───────── */
+  #preview-pane {
+    flex: 1; display: flex; flex-direction: column; overflow: hidden;
+    background: #0f0f0f;
+  }
+  #preview-pane.hidden { display: none; }
+  .preview-toolbar {
+    padding: 10px 16px; background: #161616; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .preview-toolbar span { font-size: 13px; color: var(--label); flex: 1; }
+  .btn-sm {
+    background: #222; border: 1px solid var(--border); border-radius: 5px;
+    color: var(--text); font-size: 12px; padding: 6px 11px; cursor: pointer;
+    transition: background .15s;
+  }
+  .btn-sm:hover { background: #2e2e2e; }
+  #preview-frame { flex: 1; border: none; width: 100%; background: #fff; }
+
+  /* ───────── TOAST / STATUS ───────── */
+  #toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: #222; border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 22px; font-size: 13px; color: var(--text);
+    box-shadow: 0 4px 20px rgba(0,0,0,.5); z-index: 200;
+    transition: opacity .3s; opacity: 0; pointer-events: none;
+  }
+  #toast.show { opacity: 1; }
+  #toast.success { border-color: var(--accent2); color: var(--accent2); }
+  #toast.error { border-color: #e74c3c; color: #e74c3c; }
+
+  /* spinner */
+  .spinner {
+    display: inline-block; width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,.3); border-top-color: #fff;
+    border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════════════════════ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">⚙ Camp <span>CMS</span></div>
+    <div>
+      <label class="login-label" for="token-input">Cole o Token de desenvolvedor para entrar</label>
+      <input type="password" id="token-input" placeholder="ghp_…" autocomplete="off">
+    </div>
+    <button id="login-btn">Entrar</button>
+    <div id="login-error"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     APP SHELL
+═══════════════════════════════════════════════ -->
+<div id="app" class="hidden">
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sidebar-logo">⚙ Camp <span>CMS</span></div>
+    <nav>
+      <button class="nav-tab active" data-tab="seo">🔍 SEO</button>
+      <button class="nav-tab" data-tab="secoes">📄 Seções</button>
+      <button class="nav-tab" data-tab="rodape">🔗 Rodapé</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="btn-preview" id="toggle-preview">👁 Preview</button>
+      <button class="btn-publish" id="publish-btn">🚀 Publicar</button>
+      <button class="btn-logout" id="logout-btn">🚪 Sair</button>
+    </div>
+  </div>
+
+  <!-- EDITOR -->
+  <div id="editor">
+    <!-- SEO TAB -->
+    <div class="tab-panel active" id="tab-seo">
+      <div class="editor-header">SEO</div>
+      <div style="padding: 20px 24px 40px;">
+        <div class="field">
+          <label for="seo-title">Título da página</label>
+          <input type="text" id="seo-title" placeholder="Camp Caçambas – Locação de Caçambas">
+        </div>
+        <div class="field">
+          <label for="seo-desc">Meta Description</label>
+          <textarea id="seo-desc" class="tall" placeholder="Descrição exibida nos resultados do Google…"></textarea>
+        </div>
+        <div class="field">
+          <label for="seo-kw">Keywords</label>
+          <textarea id="seo-kw" class="tall" placeholder="caçamba, locação, entulho…"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÕES TAB -->
+    <div class="tab-panel" id="tab-secoes">
+      <div class="editor-header">Seções</div>
+      <div style="padding: 20px 24px 40px;">
+
+        <!-- HERO -->
+        <div class="accordion" data-section="hero">
+          <button class="accordion-header" data-acc="hero">
+            📱 Hero
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body" id="acc-hero">
+            <div class="field">
+              <label for="hero-wa">Número WhatsApp (com código do país)</label>
+              <input type="tel" id="hero-wa" placeholder="551941040955">
+            </div>
+          </div>
+        </div>
+
+        <!-- DIFERENCIAIS -->
+        <div class="accordion" data-section="features">
+          <button class="accordion-header" data-acc="features">
+            ⭐ Diferenciais
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body" id="acc-features">
+            <div class="feature-grid">
+              <div class="feature-card">
+                <div class="feature-card-label">Card 1</div>
+                <div class="field"><label>Título</label><input type="text" id="feat0-title"></div>
+                <div class="field"><label>Descrição</label><textarea id="feat0-desc" class="short"></textarea></div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-card-label">Card 2</div>
+                <div class="field"><label>Título</label><input type="text" id="feat1-title"></div>
+                <div class="field"><label>Descrição</label><textarea id="feat1-desc" class="short"></textarea></div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-card-label">Card 3</div>
+                <div class="field"><label>Título</label><input type="text" id="feat2-title"></div>
+                <div class="field"><label>Descrição</label><textarea id="feat2-desc" class="short"></textarea></div>
+              </div>
+              <div class="feature-card">
+                <div class="feature-card-label">Card 4</div>
+                <div class="field"><label>Título</label><input type="text" id="feat3-title"></div>
+                <div class="field"><label>Descrição</label><textarea id="feat3-desc" class="short"></textarea></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SERVIÇOS -->
+        <div class="accordion" data-section="services">
+          <button class="accordion-header" data-acc="services">
+            🛠 Serviços
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body" id="acc-services">
+            <div class="field"><label for="srv-tag">Tag da seção</label><input type="text" id="srv-tag" placeholder="Nossos Serviços"></div>
+            <div class="field"><label for="srv-title">Título</label><input type="text" id="srv-title"></div>
+            <div class="field"><label for="srv-desc">Descrição</label><textarea id="srv-desc" class="short"></textarea></div>
+            <hr class="divider">
+            <div class="subsection">
+              <div class="subsection-label">Serviço 1</div>
+              <div class="field"><label>Título</label><input type="text" id="srv0-title"></div>
+              <div class="field"><label>Descrição</label><textarea id="srv0-desc" class="short"></textarea></div>
+              <div class="field"><label>Texto WhatsApp</label><input type="text" id="srv0-wa"></div>
+            </div>
+            <div class="subsection">
+              <div class="subsection-label">Serviço 2</div>
+              <div class="field"><label>Título</label><input type="text" id="srv1-title"></div>
+              <div class="field"><label>Descrição</label><textarea id="srv1-desc" class="short"></textarea></div>
+              <div class="field"><label>Texto WhatsApp</label><input type="text" id="srv1-wa"></div>
+            </div>
+            <div class="subsection">
+              <div class="subsection-label">Serviço 3</div>
+              <div class="field"><label>Título</label><input type="text" id="srv2-title"></div>
+              <div class="field"><label>Descrição</label><textarea id="srv2-desc" class="short"></textarea></div>
+              <div class="field"><label>Texto WhatsApp</label><input type="text" id="srv2-wa"></div>
+            </div>
+            <div class="subsection">
+              <div class="subsection-label">Serviço 4</div>
+              <div class="field"><label>Título</label><input type="text" id="srv3-title"></div>
+              <div class="field"><label>Descrição</label><textarea id="srv3-desc" class="short"></textarea></div>
+              <div class="field"><label>Texto WhatsApp</label><input type="text" id="srv3-wa"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMO FUNCIONA -->
+        <div class="accordion" data-section="how">
+          <button class="accordion-header" data-acc="how">
+            📋 Como Funciona
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body" id="acc-how">
+            <div class="field"><label for="how-tag">Tag da seção</label><input type="text" id="how-tag"></div>
+            <div class="field"><label for="how-title">Título</label><input type="text" id="how-title"></div>
+            <div class="field"><label for="how-desc">Descrição</label><textarea id="how-desc" class="short"></textarea></div>
+            <hr class="divider">
+            <div class="subsection">
+              <div class="subsection-label">Passo 1</div>
+              <div class="field"><label>Título</label><input type="text" id="how0-title"></div>
+              <div class="field"><label>Descrição</label><textarea id="how0-desc" class="short"></textarea></div>
+            </div>
+            <div class="subsection">
+              <div class="subsection-label">Passo 2</div>
+              <div class="field"><label>Título</label><input type="text" id="how1-title"></div>
+              <div class="field"><label>Descrição</label><textarea id="how1-desc" class="short"></textarea></div>
+            </div>
+            <div class="subsection">
+              <div class="subsection-label">Passo 3</div>
+              <div class="field"><label>Título</label><input type="text" id="how2-title"></div>
+              <div class="field"><label>Descrição</label><textarea id="how2-desc" class="short"></textarea></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SOBRE NÓS -->
+        <div class="accordion" data-section="about">
+          <button class="accordion-header" data-acc="about">
+            🏕 Sobre Nós
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body" id="acc-about">
+            <div class="field"><label for="about-tag">Tag da seção</label><input type="text" id="about-tag"></div>
+            <div class="field"><label for="about-title">Título</label><input type="text" id="about-title"></div>
+            <div class="field"><label for="about-desc">Descrição</label><textarea id="about-desc" class="short"></textarea></div>
+            <hr class="divider">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+              <div class="subsection">
+                <div class="subsection-label">Stat 1</div>
+                <div class="field"><label>Valor</label><input type="text" id="stat0-value"></div>
+                <div class="field"><label>Label</label><input type="text" id="stat0-label"></div>
+              </div>
+              <div class="subsection">
+                <div class="subsection-label">Stat 2</div>
+                <div class="field"><label>Valor</label><input type="text" id="stat1-value"></div>
+                <div class="field"><label>Label</label><input type="text" id="stat1-label"></div>
+              </div>
+              <div class="subsection">
+                <div class="subsection-label">Stat 3</div>
+                <div class="field"><label>Valor</label><input type="text" id="stat2-value"></div>
+                <div class="field"><label>Label</label><input type="text" id="stat2-label"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="accordion" data-section="cta">
+          <button class="accordion-header" data-acc="cta">
+            🎯 CTA Final
+            <span class="accordion-arrow">▼</span>
+          </button>
+          <div class="accordion-body" id="acc-cta">
+            <div class="field"><label for="cta-title">Título</label><input type="text" id="cta-title"></div>
+            <div class="field"><label for="cta-desc">Descrição</label><textarea id="cta-desc" class="short"></textarea></div>
+            <div class="field"><label for="cta-wa">Número WhatsApp (com código do país)</label><input type="tel" id="cta-wa" placeholder="551941040955"></div>
+          </div>
+        </div>
+
+      </div><!-- /padding -->
+    </div><!-- /tab-secoes -->
+
+    <!-- RODAPÉ TAB -->
+    <div class="tab-panel" id="tab-rodape">
+      <div class="editor-header">Rodapé</div>
+      <div style="padding: 20px 24px 40px;">
+        <div class="field">
+          <label for="footer-copy">Copyright</label>
+          <input type="text" id="footer-copy" placeholder="© 2024 Camp Caçambas. Todos os direitos reservados.">
+        </div>
+        <div class="field">
+          <label for="footer-credit-url">URL do crédito</label>
+          <input type="url" id="footer-credit-url" placeholder="https://exemplo.com">
+        </div>
+        <div class="field">
+          <label for="footer-credit-name">Nome do crédito</label>
+          <input type="text" id="footer-credit-name" placeholder="Nome do desenvolvedor">
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /editor -->
+
+  <!-- PREVIEW PANE -->
+  <div id="preview-pane" class="hidden">
+    <div class="preview-toolbar">
+      <span>Pré-visualização</span>
+      <button class="btn-sm" id="reload-preview">↻ Atualizar</button>
+      <button class="btn-sm" id="close-preview">✕ Fechar</button>
+    </div>
+    <iframe id="preview-frame" src="../index.html" title="Preview"></iframe>
+  </div>
+
+</div><!-- /app -->
+
+<div id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  // ── constants ──
+  const REPO = 'freak-m/campcacambas';
+  const API  = `https://api.github.com/repos/${REPO}/contents/content.json`;
+  const RAW  = `https://raw.githubusercontent.com/${REPO}/main/content.json`;
+  const TOKEN_KEY = 'gh_token';
+
+  // ── state ──
+  let debounceTimer = null;
+  let previewVisible = false;
+
+  // ── element refs ──
+  const loginScreen  = document.getElementById('login-screen');
+  const appShell     = document.getElementById('app');
+  const tokenInput   = document.getElementById('token-input');
+  const loginBtn     = document.getElementById('login-btn');
+  const loginError   = document.getElementById('login-error');
+  const previewPane  = document.getElementById('preview-pane');
+  const previewFrame = document.getElementById('preview-frame');
+  const publishBtn   = document.getElementById('publish-btn');
+  const logoutBtn    = document.getElementById('logout-btn');
+  const togglePreviewBtn = document.getElementById('toggle-preview');
+  const toast        = document.getElementById('toast');
+
+  // ════════════════════════════════════════════
+  //  TOAST
+  // ════════════════════════════════════════════
+  let toastTimeout;
+  function showToast(msg, type = '') {
+    toast.textContent = msg;
+    toast.className = 'show' + (type ? ' ' + type : '');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => { toast.className = ''; }, 4500);
+  }
+
+  // ════════════════════════════════════════════
+  //  AUTH
+  // ════════════════════════════════════════════
+  function getToken() { return sessionStorage.getItem(TOKEN_KEY); }
+
+  async function doLogin() {
+    const token = tokenInput.value.trim();
+    if (!token) { loginError.textContent = 'Informe um token.'; return; }
+    loginBtn.disabled = true;
+    loginBtn.innerHTML = '<span class="spinner"></span> Verificando…';
+    loginError.textContent = '';
+    try {
+      const r = await fetch(API, {
+        headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (!r.ok) throw new Error('Token inválido ou sem acesso ao repositório.');
+      sessionStorage.setItem(TOKEN_KEY, token);
+      const data = await r.json();
+      const content = JSON.parse(atob(data.content.replace(/\n/g, '')));
+      bootApp(content);
+    } catch (e) {
+      loginError.textContent = e.message || 'Erro ao autenticar.';
+    } finally {
+      loginBtn.disabled = false;
+      loginBtn.textContent = 'Entrar';
+    }
+  }
+
+  loginBtn.addEventListener('click', doLogin);
+  tokenInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+  // ════════════════════════════════════════════
+  //  BOOT (after login)
+  // ════════════════════════════════════════════
+  function bootApp(content) {
+    loginScreen.classList.add('hidden');
+    appShell.classList.remove('hidden');
+    populateForm(content);
+  }
+
+  // ════════════════════════════════════════════
+  //  POPULATE FORM
+  // ════════════════════════════════════════════
+  function val(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.value = value || '';
+  }
+
+  function populateForm(c) {
+    // SEO
+    val('seo-title', c.seo?.title);
+    val('seo-desc',  c.seo?.description);
+    val('seo-kw',    c.seo?.keywords);
+
+    // Hero
+    val('hero-wa', c.hero?.whatsapp_number);
+
+    // Diferenciais
+    (c.features || []).forEach((f, i) => {
+      val(`feat${i}-title`, f.title);
+      val(`feat${i}-desc`,  f.description);
+    });
+
+    // Serviços
+    val('srv-tag',   c.services?.tag);
+    val('srv-title', c.services?.title);
+    val('srv-desc',  c.services?.description);
+    (c.services?.cards || []).forEach((s, i) => {
+      val(`srv${i}-title`, s.title);
+      val(`srv${i}-desc`,  s.description);
+      val(`srv${i}-wa`,    s.wa_text);
+    });
+
+    // Como Funciona
+    val('how-tag',   c.how?.tag);
+    val('how-title', c.how?.title);
+    val('how-desc',  c.how?.description);
+    (c.how?.steps || []).forEach((s, i) => {
+      val(`how${i}-title`, s.title);
+      val(`how${i}-desc`,  s.description);
+    });
+
+    // Sobre
+    val('about-tag',   c.about?.tag);
+    val('about-title', c.about?.title);
+    val('about-desc',  c.about?.description);
+    (c.about?.stats || []).forEach((s, i) => {
+      val(`stat${i}-value`, s.value);
+      val(`stat${i}-label`, s.label);
+    });
+
+    // CTA
+    val('cta-title', c.cta?.title);
+    val('cta-desc',  c.cta?.description);
+    val('cta-wa',    c.cta?.whatsapp_number);
+
+    // Rodapé
+    val('footer-copy',        c.footer?.copyright);
+    val('footer-credit-url',  c.footer?.credit_url);
+    val('footer-credit-name', c.footer?.credit_name);
+  }
+
+  // ════════════════════════════════════════════
+  //  COLLECT FORM
+  // ════════════════════════════════════════════
+  function g(id) {
+    const el = document.getElementById(id);
+    return el ? el.value : '';
+  }
+
+  function collectContent() {
+    return {
+      seo: {
+        title:       g('seo-title'),
+        description: g('seo-desc'),
+        keywords:    g('seo-kw')
+      },
+      hero: {
+        whatsapp_number: g('hero-wa')
+      },
+      features: [0,1,2,3].map(i => ({
+        title:       g(`feat${i}-title`),
+        description: g(`feat${i}-desc`)
+      })),
+      services: {
+        tag:         g('srv-tag'),
+        title:       g('srv-title'),
+        description: g('srv-desc'),
+        cards: [0,1,2,3].map(i => ({
+          title:       g(`srv${i}-title`),
+          description: g(`srv${i}-desc`),
+          wa_text:     g(`srv${i}-wa`)
+        }))
+      },
+      how: {
+        tag:         g('how-tag'),
+        title:       g('how-title'),
+        description: g('how-desc'),
+        steps: [0,1,2].map(i => ({
+          title:       g(`how${i}-title`),
+          description: g(`how${i}-desc`)
+        }))
+      },
+      about: {
+        tag:         g('about-tag'),
+        title:       g('about-title'),
+        description: g('about-desc'),
+        stats: [0,1,2].map(i => ({
+          value: g(`stat${i}-value`),
+          label: g(`stat${i}-label`)
+        }))
+      },
+      cta: {
+        title:            g('cta-title'),
+        description:      g('cta-desc'),
+        whatsapp_number:  g('cta-wa')
+      },
+      footer: {
+        copyright:   g('footer-copy'),
+        credit_url:  g('footer-credit-url'),
+        credit_name: g('footer-credit-name')
+      }
+    };
+  }
+
+  // ════════════════════════════════════════════
+  //  LIVE PREVIEW SYNC
+  // ════════════════════════════════════════════
+  function sendPreviewUpdate() {
+    if (!previewVisible) return;
+    const content = collectContent();
+    try {
+      previewFrame.contentWindow.postMessage({ type: 'cms_update', content }, '*');
+    } catch (_) {}
+  }
+
+  function scheduleSync() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(sendPreviewUpdate, 300);
+  }
+
+  // listen to all inputs in editor
+  document.getElementById('editor').addEventListener('input', scheduleSync);
+
+  // ════════════════════════════════════════════
+  //  TABS
+  // ════════════════════════════════════════════
+  document.querySelectorAll('.nav-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ════════════════════════════════════════════
+  //  ACCORDIONS
+  // ════════════════════════════════════════════
+  const sectionMap = {
+    hero:     '#hero',
+    features: '#diferenciais, .diferenciais, [data-section="diferenciais"]',
+    services: '#servicos, #services, .servicos',
+    how:      '#como-funciona, #how, .como-funciona',
+    about:    '#sobre, #about, .sobre',
+    cta:      '#cta, .cta'
+  };
+
+  document.querySelectorAll('.accordion-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const key = header.dataset.acc;
+      const body = document.getElementById('acc-' + key);
+      const isOpen = header.classList.contains('open');
+
+      // close all
+      document.querySelectorAll('.accordion-header').forEach(h => h.classList.remove('open'));
+      document.querySelectorAll('.accordion-body').forEach(b => b.classList.remove('open'));
+
+      if (!isOpen) {
+        header.classList.add('open');
+        body.classList.add('open');
+        // notify iframe to scroll & highlight
+        if (previewVisible) {
+          try {
+            previewFrame.contentWindow.postMessage({ type: 'cms_scroll', section: key }, '*');
+          } catch (_) {}
+        }
+      }
+    });
+  });
+
+  // ════════════════════════════════════════════
+  //  PREVIEW TOGGLE
+  // ════════════════════════════════════════════
+  function showPreview() {
+    previewVisible = true;
+    previewPane.classList.remove('hidden');
+    togglePreviewBtn.textContent = '👁 Ocultar';
+    sendPreviewUpdate();
+  }
+  function hidePreview() {
+    previewVisible = false;
+    previewPane.classList.add('hidden');
+    togglePreviewBtn.textContent = '👁 Preview';
+  }
+
+  togglePreviewBtn.addEventListener('click', () => {
+    previewVisible ? hidePreview() : showPreview();
+  });
+  document.getElementById('close-preview').addEventListener('click', hidePreview);
+  document.getElementById('reload-preview').addEventListener('click', () => {
+    previewFrame.src = previewFrame.src;
+    previewFrame.addEventListener('load', sendPreviewUpdate, { once: true });
+  });
+
+  // send update after iframe loads
+  previewFrame.addEventListener('load', () => {
+    if (previewVisible) setTimeout(sendPreviewUpdate, 200);
+  });
+
+  // ════════════════════════════════════════════
+  //  PUBLISH
+  // ════════════════════════════════════════════
+  publishBtn.addEventListener('click', async () => {
+    const token = getToken();
+    if (!token) { showToast('Sessão expirada. Faça login novamente.', 'error'); return; }
+
+    publishBtn.disabled = true;
+    publishBtn.innerHTML = '<span class="spinner"></span> Publicando…';
+
+    try {
+      // 1. get current SHA
+      const metaRes = await fetch(API, {
+        headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (!metaRes.ok) throw new Error('Erro ao buscar arquivo atual (status ' + metaRes.status + ')');
+      const meta = await metaRes.json();
+      const sha = meta.sha;
+
+      // 2. build content
+      const content = collectContent();
+      const json    = JSON.stringify(content, null, 2);
+      const b64     = btoa(unescape(encodeURIComponent(json)));
+
+      // 3. PUT
+      const putRes = await fetch(API, {
+        method: 'PUT',
+        headers: {
+          Authorization: 'token ' + token,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: 'Update content via CMS',
+          content: b64,
+          sha: sha,
+          branch: 'main'
+        })
+      });
+      if (!putRes.ok) {
+        const err = await putRes.json().catch(() => ({}));
+        throw new Error(err.message || 'Erro ao publicar (status ' + putRes.status + ')');
+      }
+
+      showToast('✓ Publicado! O site atualiza em ~5 minutos.', 'success');
+    } catch (e) {
+      showToast('✗ ' + (e.message || 'Erro desconhecido'), 'error');
+    } finally {
+      publishBtn.disabled = false;
+      publishBtn.innerHTML = '🚀 Publicar';
+    }
+  });
+
+  // ════════════════════════════════════════════
+  //  LOGOUT
+  // ════════════════════════════════════════════
+  logoutBtn.addEventListener('click', () => {
+    sessionStorage.removeItem(TOKEN_KEY);
+    location.reload();
+  });
+
+  // ════════════════════════════════════════════
+  //  AUTO-LOGIN if token already in session
+  // ════════════════════════════════════════════
+  (async function tryAutoLogin() {
+    const token = sessionStorage.getItem(TOKEN_KEY);
+    if (!token) return;
+    try {
+      const r = await fetch(API, {
+        headers: { Authorization: 'token ' + token, Accept: 'application/vnd.github.v3+json' }
+      });
+      if (!r.ok) { sessionStorage.removeItem(TOKEN_KEY); return; }
+      const data = await r.json();
+      const content = JSON.parse(atob(data.content.replace(/\n/g, '')));
+      bootApp(content);
+    } catch (_) {
+      sessionStorage.removeItem(TOKEN_KEY);
+    }
+  })();
+
+})();
+</script>
+</body>
+</html>
