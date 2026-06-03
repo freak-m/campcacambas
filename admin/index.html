@@ -700,8 +700,9 @@
     debounceTimer = setTimeout(sendPreviewUpdate, 300);
   }
 
-  // listen to all inputs in editor
+  // listen to all inputs and selects in editor
   document.getElementById('editor').addEventListener('input', scheduleSync);
+  document.getElementById('editor').addEventListener('change', scheduleSync);
 
   // ════════════════════════════════════════════
   //  TABS
