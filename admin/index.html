@@ -576,6 +576,7 @@
     (c.features || []).forEach((f, i) => {
       val(`feat${i}-title`, f.title);
       val(`feat${i}-desc`,  f.description);
+      if (f.icon) { const s = document.getElementById(`feat${i}-icon`); if(s) s.value = f.icon; }
     });
 
     // Serviços
@@ -586,6 +587,7 @@
       val(`srv${i}-title`, s.title);
       val(`srv${i}-desc`,  s.description);
       val(`srv${i}-wa`,    s.wa_text);
+      if (s.icon) { const sel = document.getElementById(`srv${i}-icon`); if(sel) sel.value = s.icon; }
     });
 
     // Como Funciona
@@ -637,7 +639,8 @@
       },
       features: [0,1,2,3].map(i => ({
         title:       g(`feat${i}-title`),
-        description: g(`feat${i}-desc`)
+        description: g(`feat${i}-desc`),
+        icon:        g(`feat${i}-icon`)
       })),
       services: {
         tag:         g('srv-tag'),
@@ -646,7 +649,8 @@
         cards: [0,1,2,3].map(i => ({
           title:       g(`srv${i}-title`),
           description: g(`srv${i}-desc`),
-          wa_text:     g(`srv${i}-wa`)
+          wa_text:     g(`srv${i}-wa`),
+          icon:        g(`srv${i}-icon`)
         }))
       },
       how: {

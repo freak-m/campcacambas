@@ -8,20 +8,20 @@
     "whatsapp_number": "551941040955"
   },
   "features": [
-    { "title": "Segurança", "description": "Caçambas em conformidade com as normas municipais e ambientais." },
-    { "title": "Entrega Rápida", "description": "Caçamba no local em poucas horas após o pedido." },
-    { "title": "Melhor Preço", "description": "Orçamento transparente, sem taxas surpresa." },
-    { "title": "Atendimento", "description": "Equipe pronta para atender via WhatsApp ou telefone." }
+    { "title": "Segurança", "description": "Caçambas em conformidade com as normas municipais e ambientais.", "icon": "shield" },
+    { "title": "Entrega Rápida", "description": "Caçamba no local em poucas horas após o pedido.", "icon": "clock" },
+    { "title": "Melhor Preço", "description": "Orçamento transparente, sem taxas surpresa.", "icon": "dollar" },
+    { "title": "Atendimento", "description": "Equipe pronta para atender via WhatsApp ou telefone.", "icon": "users" }
   ],
   "services": {
     "tag": "Nossos Serviços",
     "title": "Caçambas Para Cada Tipo de Obra",
     "description": "Atendemos reformas residenciais, construções comerciais, demolições e muito mais.",
     "cards": [
-      { "title": "Reforma Residencial", "description": "Ideal para entulho de reformas em casas e apartamentos.", "wa_text": "Quero alugar uma caçamba para reforma residencial." },
-      { "title": "Obra Comercial", "description": "Caçambas de maior capacidade para obras comerciais e industriais.", "wa_text": "Quero alugar uma caçamba para obra comercial." },
-      { "title": "Demolição", "description": "Descarte seguro de resíduos de demolição, concreto e alvenaria.", "wa_text": "Quero alugar uma caçamba para demolição." },
-      { "title": "Limpeza de Terreno", "description": "Para descarte de vegetação, terra e resíduos de limpeza de lote.", "wa_text": "Quero alugar uma caçamba para limpeza de terreno." }
+      { "title": "Reforma Residencial", "description": "Ideal para entulho de reformas em casas e apartamentos.", "wa_text": "Quero alugar uma caçamba para reforma residencial.", "icon": "home" },
+      { "title": "Obra Comercial", "description": "Caçambas de maior capacidade para obras comerciais e industriais.", "wa_text": "Quero alugar uma caçamba para obra comercial.", "icon": "building" },
+      { "title": "Demolição", "description": "Descarte seguro de resíduos de demolição, concreto e alvenaria.", "wa_text": "Quero alugar uma caçamba para demolição.", "icon": "trash" },
+      { "title": "Limpeza de Terreno", "description": "Para descarte de vegetação, terra e resíduos de limpeza de lote.", "wa_text": "Quero alugar uma caçamba para limpeza de terreno.", "icon": "map-pin" }
     ]
   },
   "how": {
