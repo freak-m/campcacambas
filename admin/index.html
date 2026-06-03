@@ -37,13 +37,20 @@
   .login-logo { font-size: 22px; font-weight: 700; color: #fff; text-align: center; }
   .login-logo span { color: var(--accent); }
   .login-label { font-size: 13px; color: var(--label); margin-bottom: 6px; display: block; }
-  .login-box input[type="password"] {
-    width: 100%; padding: 10px 12px;
+  .token-wrap { position: relative; }
+  .token-wrap input {
+    width: 100%; padding: 10px 44px 10px 12px;
     background: var(--input); border: 1px solid var(--border);
     border-radius: 6px; color: #fff; font-size: 14px; outline: none;
-    transition: border-color .2s;
+    transition: border-color .2s; box-sizing: border-box;
   }
-  .login-box input[type="password"]:focus { border-color: var(--accent); }
+  .token-wrap input:focus { border-color: var(--accent); }
+  .token-toggle {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    background: none; border: none; cursor: pointer; color: var(--label);
+    padding: 4px; display: flex; align-items: center; transition: color .2s;
+  }
+  .token-toggle:hover { color: #fff; }
   #login-btn {
     background: var(--accent); border: none; border-radius: 6px;
     color: #fff; font-size: 14px; font-weight: 600; padding: 11px;
@@ -212,7 +219,12 @@
     <div class="login-logo">⚙ Camp <span>CMS</span></div>
     <div>
       <label class="login-label" for="token-input">Cole o Token de desenvolvedor para entrar</label>
-      <input type="password" id="token-input" placeholder="ghp_…" autocomplete="off">
+      <div class="token-wrap">
+        <input type="password" id="token-input" placeholder="ghp_…" autocomplete="off">
+        <button type="button" class="token-toggle" id="token-toggle" aria-label="Mostrar/ocultar token">
+          <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
     </div>
     <button id="login-btn">Entrar</button>
     <div id="login-error"></div>
@@ -529,6 +541,15 @@
   loginBtn.addEventListener('click', doLogin);
   tokenInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
+  // Toggle show/hide token
+  document.getElementById('token-toggle').addEventListener('click', function() {
+    const isPassword = tokenInput.type === 'password';
+    tokenInput.type = isPassword ? 'text' : 'password';
+    document.getElementById('eye-icon').innerHTML = isPassword
+      ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+      : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  });
+
   // ════════════════════════════════════════════
   //  BOOT (after login)
   // ════════════════════════════════════════════
@@ -536,6 +557,7 @@
     loginScreen.classList.add('hidden');
     appShell.classList.remove('hidden');
     populateForm(content);
+    showPreview();
   }
 
   // ════════════════════════════════════════════
@@ -753,9 +775,9 @@
     previewFrame.addEventListener('load', sendPreviewUpdate, { once: true });
   });
 
-  // send update after iframe loads
+  // send update after iframe loads (wait 900ms for content.json fetch inside iframe)
   previewFrame.addEventListener('load', () => {
-    if (previewVisible) setTimeout(sendPreviewUpdate, 200);
+    if (previewVisible) setTimeout(sendPreviewUpdate, 900);
   });
 
   // ════════════════════════════════════════════
