@@ -528,7 +528,7 @@
       if (!r.ok) throw new Error('Token inválido ou sem acesso ao repositório.');
       sessionStorage.setItem(TOKEN_KEY, token);
       const data = await r.json();
-      const content = JSON.parse(atob(data.content.replace(/\n/g, '')));
+      const content = JSON.parse(b64DecodeUTF8(data.content.replace(/\n/g, '')));
       bootApp(content);
     } catch (e) {
       loginError.textContent = e.message || 'Erro ao autenticar.';
@@ -538,7 +538,10 @@
     }
   }
 
-  loginBtn.addEventListener('click', doLogin);
+  function b64DecodeUTF8(str) {
+    return decodeURIComponent(atob(str.replace(/\n/g, '')).split('').map(c =>
+      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  }
   tokenInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
   // Toggle show/hide token
@@ -853,7 +856,7 @@
       });
       if (!r.ok) { sessionStorage.removeItem(TOKEN_KEY); return; }
       const data = await r.json();
-      const content = JSON.parse(atob(data.content.replace(/\n/g, '')));
+      const content = JSON.parse(b64DecodeUTF8(data.content.replace(/\n/g, '')));
       bootApp(content);
     } catch (_) {
       sessionStorage.removeItem(TOKEN_KEY);
