@@ -1,0 +1,57 @@
+{
+  "seo": {
+    "title": "Caçambas em Campinas | Camp Caçambas – Locação de Caçamba de Entulho",
+    "description": "Camp Caçambas oferece locação de caçambas em Campinas e região para obras, reformas, demolições e limpeza de terreno. Entrega rápida, preço justo e descarte correto. Ligue: 19 4104-0955.",
+    "keywords": "caçamba em Campinas, locação de caçamba Campinas, aluguel de caçamba Campinas, caçamba de entulho Campinas, caçamba para obra Campinas, caçamba para reforma, caçamba para demolição, Camp Caçambas, caçamba estacionária Campinas, entulho Campinas"
+  },
+  "hero": {
+    "whatsapp_number": "551941040955"
+  },
+  "features": [
+    { "title": "Segurança", "description": "Caçambas em conformidade com as normas municipais e ambientais." },
+    { "title": "Entrega Rápida", "description": "Caçamba no local em poucas horas após o pedido." },
+    { "title": "Melhor Preço", "description": "Orçamento transparente, sem taxas surpresa." },
+    { "title": "Atendimento", "description": "Equipe pronta para atender via WhatsApp ou telefone." }
+  ],
+  "services": {
+    "tag": "Nossos Serviços",
+    "title": "Caçambas Para Cada Tipo de Obra",
+    "description": "Atendemos reformas residenciais, construções comerciais, demolições e muito mais.",
+    "cards": [
+      { "title": "Reforma Residencial", "description": "Ideal para entulho de reformas em casas e apartamentos.", "wa_text": "Quero alugar uma caçamba para reforma residencial." },
+      { "title": "Obra Comercial", "description": "Caçambas de maior capacidade para obras comerciais e industriais.", "wa_text": "Quero alugar uma caçamba para obra comercial." },
+      { "title": "Demolição", "description": "Descarte seguro de resíduos de demolição, concreto e alvenaria.", "wa_text": "Quero alugar uma caçamba para demolição." },
+      { "title": "Limpeza de Terreno", "description": "Para descarte de vegetação, terra e resíduos de limpeza de lote.", "wa_text": "Quero alugar uma caçamba para limpeza de terreno." }
+    ]
+  },
+  "how": {
+    "tag": "Simples e Rápido",
+    "title": "Como Funciona?",
+    "description": "Em apenas 3 passos você resolve o entulho da sua obra.",
+    "steps": [
+      { "title": "Entre em Contato", "description": "Fale conosco pelo WhatsApp ou telefone e informe o endereço e tipo de entulho." },
+      { "title": "Receba o Orçamento", "description": "Enviamos o orçamento na hora, sem burocracia, com condições claras." },
+      { "title": "Entrega e Retirada", "description": "Entregamos a caçamba e, quando cheia, buscamos. Simples assim." }
+    ]
+  },
+  "about": {
+    "tag": "Sobre Nós",
+    "title": "Especialistas em Locação de Caçambas",
+    "description": "A Camp Caçambas atua em Campinas e região com foco em agilidade, responsabilidade ambiental e atendimento de qualidade. Somos parceiros de construtoras, reformadores e pessoas físicas que precisam de solução rápida para o entulho.",
+    "stats": [
+      { "value": "+500", "label": "Clientes Atendidos" },
+      { "value": "Rápido", "label": "Entrega em horas" },
+      { "value": "100%", "label": "Comprometidos" }
+    ]
+  },
+  "cta": {
+    "title": "Pronto para Resolver o Entulho da Sua Obra?",
+    "description": "Fale com a nossa equipe agora e receba seu orçamento personalizado.",
+    "whatsapp_number": "551941040955"
+  },
+  "footer": {
+    "copyright": "© 2019 Camp Caçambas. Criado e gerenciado por",
+    "credit_url": "https://conselhodigital.com",
+    "credit_name": "conselhodigital.com"
+  }
+}
