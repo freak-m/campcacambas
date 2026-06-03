@@ -138,6 +138,29 @@
   .field input:focus, .field textarea:focus { border-color: var(--accent); }
   .field textarea.tall { min-height: 80px; }
   .field textarea.short { min-height: 56px; }
+
+  /* ───────── ICON SELECT ───────── */
+  .icon-select {
+    width: 100%; background: var(--input); border: 1px solid var(--border);
+    border-radius: 6px; color: #fff; font-size: 14px;
+    padding: 9px 11px; outline: none; cursor: pointer;
+    font-family: inherit; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+    padding-right: 32px;
+    transition: border-color .2s, box-shadow .2s, transform .15s;
+  }
+  @keyframes selectPop {
+    0%   { transform: scaleY(0.95) translateY(-4px); opacity: 0.6; }
+    60%  { transform: scaleY(1.02) translateY(1px); }
+    100% { transform: scaleY(1) translateY(0); opacity: 1; }
+  }
+  .icon-select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(58,134,200,0.25);
+    animation: selectPop .2s ease forwards;
+  }
+  .icon-select option { background: #1a1a1a; color: #fff; }
   .section-title {
     font-size: 13px; font-weight: 600; color: var(--accent);
     margin: 22px 0 12px; text-transform: uppercase; letter-spacing: .5px;
@@ -703,6 +726,17 @@
   // listen to all inputs and selects in editor
   document.getElementById('editor').addEventListener('input', scheduleSync);
   document.getElementById('editor').addEventListener('change', scheduleSync);
+
+  // flash preview section when focusing an icon select
+  document.querySelectorAll('.icon-select').forEach(sel => {
+    sel.addEventListener('focus', () => {
+      const key = sel.closest('[data-acc]')?.dataset.acc;
+      const id = key && sectionMap[key];
+      if (id && previewFrame.contentWindow) {
+        previewFrame.contentWindow.postMessage({ type: 'cms_scroll', id }, '*');
+      }
+    });
+  });
 
   // ════════════════════════════════════════════
   //  TABS
