@@ -542,6 +542,7 @@
     return decodeURIComponent(atob(str.replace(/\n/g, '')).split('').map(c =>
       '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
   }
+  loginBtn.addEventListener('click', doLogin);
   tokenInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
 
   // Toggle show/hide token
