@@ -211,6 +211,15 @@
     transition: background .15s;
   }
   .btn-sm:hover { background: #2e2e2e; }
+  .btn-secondary {
+    background: #222; border: 1px solid var(--border); border-radius: 6px;
+    color: var(--accent); font-size: 13px; padding: 8px 14px; cursor: pointer;
+    transition: background .15s; font-family: inherit;
+  }
+  .btn-secondary:hover { background: #2a2a2a; }
+  .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
+  .faq-item-header { display: flex; justify-content: space-between; align-items: center; }
+  .faq-remove { background: none; border: none; color: #e74c3c; cursor: pointer; font-size: 16px; padding: 2px 6px; }
   #preview-frame { flex: 1; border: none; width: 100%; background: #fff; }
 
   /* ───────── TOAST / STATUS ───────── */
@@ -293,6 +302,45 @@
           <label for="seo-kw">Keywords</label>
           <textarea id="seo-kw" class="tall" placeholder="caçamba, locação, entulho…"></textarea>
         </div>
+
+        <hr class="divider">
+        <div class="section-title">🖼 Imagem de Compartilhamento (og:image)</div>
+        <div class="field">
+          <label for="seo-og-image">URL da imagem (aparece no WhatsApp / Facebook ao compartilhar)</label>
+          <input type="url" id="seo-og-image" placeholder="https://seusite.com/assets/hero.png">
+        </div>
+
+        <hr class="divider">
+        <div class="section-title">🏢 Dados do Negócio (LocalBusiness)</div>
+        <div class="field">
+          <label for="biz-name">Nome da empresa</label>
+          <input type="text" id="biz-name" placeholder="Camp Caçambas">
+        </div>
+        <div class="field">
+          <label for="biz-phone">Telefone</label>
+          <input type="tel" id="biz-phone" placeholder="+55-19-4104-0955">
+        </div>
+        <div class="field">
+          <label for="biz-city">Cidade</label>
+          <input type="text" id="biz-city" placeholder="Campinas">
+        </div>
+        <div class="field">
+          <label for="biz-hours">Horário de funcionamento</label>
+          <input type="text" id="biz-hours" placeholder="Mo-Sa 07:00-18:00">
+        </div>
+
+        <hr class="divider">
+        <div class="section-title">📍 Área de Atendimento</div>
+        <div class="field">
+          <label for="biz-area">Cidades / regiões atendidas</label>
+          <input type="text" id="biz-area" placeholder="Campinas e região">
+        </div>
+
+        <hr class="divider">
+        <div class="section-title">❓ FAQ (Perguntas Frequentes)</div>
+        <p style="font-size:12px;color:var(--label);margin-bottom:14px;">Aparece diretamente nos resultados do Google com perguntas expansíveis.</p>
+        <div id="faq-list"></div>
+        <button class="btn-secondary" id="faq-add-btn" style="margin-top:8px;">+ Adicionar pergunta</button>
       </div>
     </div>
 
@@ -642,7 +690,58 @@
     val('footer-copy',        c.footer?.copyright);
     val('footer-credit-url',  c.footer?.credit_url);
     val('footer-credit-name', c.footer?.credit_name);
+
+    // SEO avançado
+    val('seo-og-image', c.seo?.og_image);
+    val('biz-name',  c.business?.name);
+    val('biz-phone', c.business?.phone);
+    val('biz-city',  c.business?.city);
+    val('biz-hours', c.business?.hours);
+    val('biz-area',  c.business?.area);
+    renderFaqList(c.faq || []);
   }
+
+  // ════════════════════════════════════════════
+  //  FAQ BUILDER
+  // ════════════════════════════════════════════
+  let faqData = [];
+
+  function renderFaqList(items) {
+    faqData = items.map(f => ({ q: f.question || '', a: f.answer || '' }));
+    const list = document.getElementById('faq-list');
+    list.innerHTML = '';
+    faqData.forEach((item, idx) => {
+      const div = document.createElement('div');
+      div.className = 'faq-item';
+      div.innerHTML = `
+        <div class="faq-item-header">
+          <span style="font-size:12px;color:var(--label);text-transform:uppercase;letter-spacing:.4px">Pergunta ${idx + 1}</span>
+          <button class="faq-remove" data-idx="${idx}" title="Remover">✕</button>
+        </div>
+        <div class="field" style="margin:0">
+          <label>Pergunta</label>
+          <input type="text" class="faq-q" data-idx="${idx}" value="${escHtml(item.q)}" placeholder="Ex: Qual o prazo de entrega?">
+        </div>
+        <div class="field" style="margin:0">
+          <label>Resposta</label>
+          <textarea class="faq-a short" data-idx="${idx}" placeholder="Ex: Entregamos em até 3 horas após o pedido.">${escHtml(item.a)}</textarea>
+        </div>`;
+      list.appendChild(div);
+    });
+    list.querySelectorAll('.faq-remove').forEach(btn =>
+      btn.addEventListener('click', () => { faqData.splice(+btn.dataset.idx, 1); renderFaqList(faqData); scheduleSync(); }));
+    list.querySelectorAll('.faq-q').forEach(inp =>
+      inp.addEventListener('input', () => { faqData[+inp.dataset.idx].q = inp.value; scheduleSync(); }));
+    list.querySelectorAll('.faq-a').forEach(ta =>
+      ta.addEventListener('input', () => { faqData[+ta.dataset.idx].a = ta.value; scheduleSync(); }));
+  }
+
+  function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+
+  document.getElementById('faq-add-btn').addEventListener('click', () => {
+    faqData.push({ q: '', a: '' });
+    renderFaqList(faqData);
+  });
 
   // ════════════════════════════════════════════
   //  COLLECT FORM
@@ -657,8 +756,17 @@
       seo: {
         title:       g('seo-title'),
         description: g('seo-desc'),
-        keywords:    g('seo-kw')
+        keywords:    g('seo-kw'),
+        og_image:    g('seo-og-image')
       },
+      business: {
+        name:  g('biz-name'),
+        phone: g('biz-phone'),
+        city:  g('biz-city'),
+        hours: g('biz-hours'),
+        area:  g('biz-area')
+      },
+      faq: faqData.filter(f => f.q).map(f => ({ question: f.q, answer: f.a })),
       hero: {
         whatsapp_number: g('hero-wa')
       },

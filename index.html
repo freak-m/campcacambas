@@ -30,7 +30,7 @@
   <meta name="twitter:image" content="https://freak-m.github.io/campcacambas/assets/hero.png" />
 
   <!-- Schema.org Local Business -->
-  <script type="application/ld+json">
+  <script type="application/ld+json" id="schema-localbusiness">
   {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
@@ -351,6 +351,33 @@
           var fc = document.getElementById('footer-copyright'); if(fc && c.footer.copyright) fc.textContent = c.footer.copyright;
           var fl = document.getElementById('footer-credit-link'); if(fl && c.footer.credit_url) fl.href = c.footer.credit_url;
           var fn = document.getElementById('footer-credit-name'); if(fn && c.footer.credit_name) fn.textContent = c.footer.credit_name;
+        }
+        // og:image
+        if (c.seo && c.seo.og_image) {
+          document.querySelectorAll('meta[property="og:image"], meta[name="twitter:image"]').forEach(function(m){ m.setAttribute('content', c.seo.og_image); });
+        }
+        // LocalBusiness schema
+        if (c.business) {
+          var b = c.business;
+          var lb = document.getElementById('schema-localbusiness');
+          if (lb) {
+            var data = JSON.parse(lb.textContent);
+            if (b.name)  data.name      = b.name;
+            if (b.phone) data.telephone = b.phone;
+            if (b.city)  data.address.addressLocality = b.city;
+            if (b.hours) data.openingHours = b.hours;
+            if (b.area)  data.areaServed  = b.area;
+            lb.textContent = JSON.stringify(data, null, 2);
+          }
+        }
+        // FAQ schema
+        if (c.faq && c.faq.length) {
+          var faqEl = document.getElementById('schema-faq');
+          if (!faqEl) { faqEl = document.createElement('script'); faqEl.type = 'application/ld+json'; faqEl.id = 'schema-faq'; document.head.appendChild(faqEl); }
+          faqEl.textContent = JSON.stringify({
+            '@context': 'https://schema.org', '@type': 'FAQPage',
+            mainEntity: c.faq.map(function(f){ return { '@type': 'Question', name: f.question, acceptedAnswer: { '@type': 'Answer', text: f.answer } }; })
+          });
         }
       } catch(e) {}
     }
