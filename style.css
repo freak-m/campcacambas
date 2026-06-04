@@ -290,18 +290,18 @@ a { text-decoration: none; color: inherit; }
 .services__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 40px;
 }
 
 .service-card {
   background: var(--white);
   border-radius: var(--radius);
-  padding: 36px 28px;
+  padding: 27px 21px;
   box-shadow: var(--shadow);
   transition: all 0.25s;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 9px;
   align-items: center;
   text-align: center;
 }
@@ -311,18 +311,19 @@ a { text-decoration: none; color: inherit; }
 }
 
 .service-card__icon {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   background: linear-gradient(135deg, rgba(58,134,200,0.12), rgba(122,191,71,0.12));
-  border-radius: 16px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--blue);
 }
+.service-card__icon svg { width: 28px; height: 28px; }
 
-.service-card h3 { font-size: 1.05rem; font-weight: 700; }
-.service-card p { font-size: 0.88rem; color: var(--gray); flex: 1; }
+.service-card h3 { font-size: 0.9rem; font-weight: 700; }
+.service-card p { font-size: 0.78rem; color: var(--gray); flex: 1; }
 
 .service-card__link {
   display: inline-flex;
